@@ -36,6 +36,14 @@ contract CurrencyExchange {
         sell_price = price;
     }
 
+    function getBuyPrice() public view returns(uint256) {
+        return buy_price;
+    }
+
+    function getSellPrice() public view returns(uint256) {
+        return sell_price;
+    }
+
     // Allow the owner to increase the smart contract's token balance
     function refillTokens(uint amount) public {
         require(msg.sender == owner, "Only the owner can refill.");
