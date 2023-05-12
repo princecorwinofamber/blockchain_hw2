@@ -4,7 +4,7 @@ pragma solidity 0.8.18;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract VendingMachine {
+contract CurrencyExchange {
 
     // Declare state variables of the contract
     uint256 private buy_price;
