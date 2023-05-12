@@ -47,16 +47,14 @@ contract CurrencyExchange {
     // Allow the owner to increase the smart contract's token balance
     function refillTokens(uint amount) public {
         require(msg.sender == owner, "Only the owner can refill.");
-        require(token_balance + amount >= token_balance, "Overflow occured.");
         // cupcakeBalances[address(this)] += amount;
-        token_balance += amount;
+        token_balance += amount; // No check for overflow because starting from solidity 0.8 overflow throws an error
         token.transferFrom(msg.sender, address(this), amount);
     }
 
     // Allow the owner to increase the smart contract's token balance
     function refillEther() external payable {
         require(msg.sender == owner, "Only the owner can refill.");
-        require(wei_balance + msg.value >= wei_balance, "Overflow occured.");
         wei_balance += msg.value;
     }
 
@@ -64,7 +62,6 @@ contract CurrencyExchange {
     function purchase(uint amount) public payable {
         require(msg.value >= amount * buy_price, "Pay more!");
         require(token_balance >= amount, "Tokens ended in exchange. Come later!");
-        require(wei_balance + amount * buy_price >= wei_balance, "Overflow occured.");
         token_balance -= amount;
         wei_balance += amount * buy_price;
         token.transfer(msg.sender, amount);
@@ -75,7 +72,6 @@ contract CurrencyExchange {
         uint256 fixed_total_price = amount * sell_price;
         require(wei_balance >= fixed_total_price, "Ether ended in exchange. Come later!");
         require(token.balanceOf(msg.sender) >= amount, "You do not have enough tokens!");
-        require(token_balance + amount >= token_balance, "Overflow occured.");
         token_balance += amount;
         wei_balance -= fixed_total_price;
         token.transferFrom(msg.sender, address(this), amount);
